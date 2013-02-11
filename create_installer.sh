@@ -21,5 +21,5 @@ then
     usage
 fi
 
-date '+%Y%m%d%H%M%S' > ../modules/install_latest.txt && /bin/cp ../modules/install_latest.txt ../www/install/install_version.txt && cp -pr ../www/install . && rm -rf install/config.php install/tmp && zip -r install.zip install -x *.svn* config.php && rm -rf install && mv install.zip ../modules/install.zip
+date '+%Y%m%d%H%M%S' > ../modules/install_latest.txt && /bin/cp ../modules/install_latest.txt ../www/install/install_version.txt && cp -pr ../www/install . && rm -rf install/config.php install/tmp && zip -r install.zip install -x *.svn* *.git* config.php && rm -rf install && mv install.zip ../modules/install.zip
 

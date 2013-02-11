@@ -32,20 +32,20 @@ then
 fi
 cd ../modules/$PACKAGE && \
     cp -pr $SRC $PACKAGE && \
-    zip -r $PACKAGE-$VERSION.zip $PACKAGE -x *.svn* && \
+    zip -r $PACKAGE-$VERSION.zip $PACKAGE -x *.svn* *.git* && \
     rm -rf $PACKAGE && \
     mv $PACKAGE-$VERSION.zip repository/src/ && \
     cd repository && \
     mkdir --parents scripts/versions/$VERSION && \
     rm -rf scripts.zip && \
-    zip -r scripts.zip scripts -x *.svn* && \
+    zip -r scripts.zip scripts -x *.svn* *.git* && \
     cd ../../ && \
-    svn add ../modules/$PACKAGE
-    svn add ../modules/$PACKAGE/repository/scripts/scripts.zip
-    svn add ../modules/$PACKAGE/repository/src/$PACKAGE-$VERSION.zip
-    svn add ../modules/$PACKAGE/repository/scripts/versions
-    svn add ../modules/$PACKAGE/repository/scripts/versions/$VERSION
-    svn add ../modules/$PACKAGE/repository/scripts/versions/$VERSION/*
+    git add ../modules/$PACKAGE
+    git add ../modules/$PACKAGE/repository/scripts/scripts.zip
+    git add ../modules/$PACKAGE/repository/src/$PACKAGE-$VERSION.zip
+    git add ../modules/$PACKAGE/repository/scripts/versions
+    git add ../modules/$PACKAGE/repository/scripts/versions/$VERSION
+    git add ../modules/$PACKAGE/repository/scripts/versions/$VERSION/*
 
 # TODO: mettre à jour le fichier module/.../repository/scripts.zip du repository avec les dependances pour cette version si nécessaire
 # rappel : le fichier module/repository/scripts.zip est destiné au repository, et contient toutes les dépendances pour toutes les versions du module

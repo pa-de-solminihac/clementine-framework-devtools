@@ -30,10 +30,10 @@ VERSION=$2
 cd ../modules/$PACKAGE && \
     cd repository && \
     rm -rf scripts.zip && \
-    zip -r scripts.zip scripts -x *.svn* && \
+    zip -r scripts.zip scripts -x *.svn* *.git* && \
     mkdir --parents scripts/versions/$VERSION && \
     cd ../../ && \
-    svn add ../modules/$PACKAGE
-    svn add ../modules/$PACKAGE/repository/scripts/versions/$VERSION
-    svn add ../modules/$PACKAGE/repository/scripts/versions/$VERSION/*
+    git add ../modules/$PACKAGE
+    git add ../modules/$PACKAGE/repository/scripts/versions/$VERSION
+    git add ../modules/$PACKAGE/repository/scripts/versions/$VERSION/*
 

@@ -36,7 +36,7 @@ function copy_recursive ($src, $dst) {
     @mkdir($dst, 0755);
     @chmod($dst, 0755);
     while (false !== ($file = readdir($dir))) {
-        if (($file != '.') && ($file != '..') && ($file != '.svn')) {
+        if (($file != '.') && ($file != '..') && ($file != '.svn') && ($file != '.git')) {
             if (is_dir($src . '/' . $file)) {
                 copy_recursive($src . '/' . $file, $dst . '/' . $file);
             } else {
