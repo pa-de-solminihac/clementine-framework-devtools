@@ -1,4 +1,5 @@
 #!/bin/bash
+pushd "$(dirname "$0")"
 echo "Update DEVTOOLS"
 (git status -sb | grep -v '## master')
 
@@ -21,3 +22,4 @@ do
     echo " - ${repo:11:-11} (scripts)" 
     (cd ${repo} && cd ../../repository/scripts && git status -sb | grep -v '## master')
 done
+popd
