@@ -37,6 +37,7 @@ cd ../modules/$PACKAGE && \
     mv $PACKAGE-$VERSION.zip repository/src/ && \
     cd repository && \
     mkdir --parents scripts/versions/$VERSION && \
+    touch scripts/versions/$VERSION/.gitignore && \
     rm -rf scripts.zip && \
     zip -r scripts.zip scripts -x *.svn* *.git* && \
     cd ../../ && \
@@ -45,6 +46,7 @@ cd ../modules/$PACKAGE && \
     git add ../modules/$PACKAGE/repository/src/$PACKAGE-$VERSION.zip
     git add ../modules/$PACKAGE/repository/scripts/versions
     git add ../modules/$PACKAGE/repository/scripts/versions/$VERSION
+    git add ../modules/$PACKAGE/repository/scripts/versions/$VERSION/.gitignore
     git add ../modules/$PACKAGE/repository/scripts/versions/$VERSION/*
 
 # TODO: mettre à jour le fichier module/.../repository/scripts.zip du repository avec les dependances pour cette version si nécessaire
