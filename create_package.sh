@@ -31,29 +31,38 @@ then
     SRC=$3
 fi
 cd ../modules/$PACKAGE && \
-    cp -pr $SRC $PACKAGE && \
-    zip -r $PACKAGE-$VERSION.zip $PACKAGE -x *.svn* *.git* && \
-    rm -rf $PACKAGE && \
-    mv $PACKAGE-$VERSION.zip repository/src/ && \
-    cd repository && \
-    mkdir --parents scripts/versions/$VERSION && \
-    touch scripts/versions/$VERSION/.gitignore && \
-    rm -rf scripts.zip && \
-    zip -r scripts.zip scripts -x *.svn* *.git* && \
-    cd ../../ && \
-    git add ../modules/$PACKAGE
-    git add ../modules/$PACKAGE/repository/scripts/scripts.zip
-    git add ../modules/$PACKAGE/repository/src/$PACKAGE-$VERSION.zip
-    git add ../modules/$PACKAGE/repository/scripts/versions
-    git add ../modules/$PACKAGE/repository/scripts/versions/$VERSION
-    git add ../modules/$PACKAGE/repository/scripts/versions/$VERSION/.gitignore
-    git add ../modules/$PACKAGE/repository/scripts/versions/$VERSION/*
+    # cp -pr $SRC $PACKAGE && \
+    # zip -r $PACKAGE-$VERSION.zip $PACKAGE -x *.svn* *.git* && \
+    # rm -rf $PACKAGE && \
+    # mv $PACKAGE-$VERSION.zip repository/src/ && \
+    cd repository/scripts && \
+    mkdir --parents versions/$VERSION && \
+    touch versions/$VERSION/.gitignore && \
+    # rm -rf scripts.zip && \
+    # zip -r scripts.zip scripts -x *.svn* *.git* && \
+    git add versions/$VERSION
+    git add versions/$VERSION/.gitignore
+    git add versions/$VERSION/*
+    git commit -m "$PACKAGE $VERSION"
+    cd ../../trunk
 
 # TODO: mettre à jour le fichier module/.../repository/scripts.zip du repository avec les dependances pour cette version si nécessaire
 # rappel : le fichier module/repository/scripts.zip est destiné au repository, et contient toutes les dépendances pour toutes les versions du module
-cd ../devtools && ./update_package_scripts.sh $PACKAGE $VERSION
+# cd ../devtools && ./update_package_scripts.sh $PACKAGE $VERSION
 
 cat <<EOF
+
+TODO :
+cd ../modules/$PACKAGE/trunk
+(...)
+git add stuff
+git commit stuff
+(...)
+git tag -a $VERSION -m "version $VERSION"
+git push
+git push --tags
+cd ../repository/scripts
+git push
 
 RAPPEL : 
     le fichier module/.../etc/module.ini est destiné au site, et contient les dépendances pour LA version X du module
