@@ -1,6 +1,6 @@
 #!/bin/bash
 CLEMENTINE_REPOSITORY_URL="https://github.com/pa-de-solminihac"
-PAUSE_TIME=2
+PAUSE_TIME=1
 
 # recupere la liste des modules dispo dans le dossier ../modules/
 MODULES=`ls -d ../modules/*/trunk/.git`
@@ -14,7 +14,7 @@ MODULES=`ls -d ../modules/*/trunk/.git`
 
 # on cree le dossier repository s'il n'existe pas deja et on entre dedans
 echo
-echo "Creating whole repository"
+echo "Creating/updating the whole repository"
 mkdir -p ../repository
 cd ../repository
 
@@ -25,7 +25,14 @@ do
     MODULE="${MODULE_PATH:11:-11}";
     # recupere les scripts du module
     mkdir -p clementine-framework-module-$MODULE-scripts/archive;
-    wget $CLEMENTINE_REPOSITORY_URL/clementine-framework-module-$MODULE-scripts/archive/master.zip -O clementine-framework-module-$MODULE-scripts/archive/master.zip;
+    echo -n "Downloading scripts for : $MODULE";
+    wget -q $CLEMENTINE_REPOSITORY_URL/clementine-framework-module-$MODULE-scripts/archive/master.zip -O clementine-framework-module-$MODULE-scripts/archive/master.zip;
+    if [[ $? == 0 ]]; then
+        echo "    ... ok"
+    else
+        echo "    ... failed"
+        exit
+    fi
     # soyons cool avec github
     sleep $PAUSE_TIME;
 done
@@ -40,9 +47,23 @@ do
     VERSIONS_DISPO=$(zip --show-files clementine-framework-module-$MODULE-scripts/archive/master.zip | grep "/versions/." | cut -d"/" -f 3 | sort -V | uniq)
     for VERSION in ${VERSIONS_DISPO[@]};
     do
-        wget $CLEMENTINE_REPOSITORY_URL/clementine-framework-module-$MODULE/archive/$VERSION.zip -O clementine-framework-module-$MODULE/archive/$VERSION.zip;
-        # soyons cool avec github
-        sleep $PAUSE_TIME;
+        # si le fichier n'existe pas deja ou s'il a mal été téléchargé on le télécharge
+        zip -T clementine-framework-module-$MODULE/archive/$VERSION.zip > /dev/null 2>&1;
+        if [[ $? > 0 ]]; then
+            echo -n "Downloading module : $MODULE $VERSION";
+            rm -f clementine-framework-module-$MODULE/archive/$VERSION.zip;
+            wget -q $CLEMENTINE_REPOSITORY_URL/clementine-framework-module-$MODULE/archive/$VERSION.zip -O clementine-framework-module-$MODULE/archive/$VERSION.zip;
+            if [[ $? == 0 ]]; then
+                echo "    ... ok"
+            else
+                echo "    ... failed"
+                exit
+            fi
+            # soyons cool avec github
+            sleep $PAUSE_TIME;
+        # else
+            # echo "Skipping module : $MODULE $VERSION, already ok";
+        fi
     done;
 done
 
