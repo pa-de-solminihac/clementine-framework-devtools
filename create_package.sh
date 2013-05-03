@@ -55,14 +55,15 @@ cat <<EOF
 TODO :
 cd ../modules/$PACKAGE/trunk
 (...)
-git add stuff
-git commit stuff
+git commit -a
+(ou git add stuff et git commit stuff)
 (...)
 git tag -a $VERSION -m "version $VERSION"
 git push
 git push --tags
 cd ../repository/scripts
 git push
+cd ../../../../devtools
 
 RAPPEL : 
     le fichier module/.../etc/module.ini est destiné au site, et contient les dépendances pour LA version X du module
