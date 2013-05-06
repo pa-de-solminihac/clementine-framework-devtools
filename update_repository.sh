@@ -22,7 +22,8 @@ echo
 echo "Getting packages scripts"
 for MODULE_PATH in ${MODULES[@]}
 do
-    MODULE="${MODULE_PATH:11:-11}";
+    # MODULE="${MODULE_PATH:11:-11}";
+    MODULE=$(echo "${MODULE_PATH:11}" | sed 's/...........$//');
     # recupere les scripts du module
     mkdir -p clementine-framework-module-$MODULE-scripts/archive;
     echo -n "Downloading scripts for : $MODULE";
@@ -41,7 +42,8 @@ echo
 echo "Getting packages versions"
 for MODULE_PATH in ${MODULES[@]}
 do
-    MODULE="${MODULE_PATH:11:-11}";
+    # MODULE="${MODULE_PATH:11:-11}";
+    MODULE=$(echo "${MODULE_PATH:11}" | sed 's/...........$//');
     mkdir -p clementine-framework-module-$MODULE/archive;
     # recupere toutes les versions dispo du module
     VERSIONS_DISPO=$(zip --show-files clementine-framework-module-$MODULE-scripts/archive/master.zip | grep "/versions/." | cut -d"/" -f 3 | sort -V | uniq)
