@@ -26,12 +26,15 @@ do
     MODULE=$(echo "${MODULE_PATH:11}" | sed 's/...........$//');
     # recupere les scripts du module
     mkdir -p clementine-framework-module-$MODULE-scripts/archive;
-    echo -n "Downloading scripts for : $MODULE";
+    MSG="    $MODULE";
+    echo -n "$MSG";
     wget -q $CLEMENTINE_REPOSITORY_URL/clementine-framework-module-$MODULE-scripts/archive/master.zip -O clementine-framework-module-$MODULE-scripts/archive/master.zip;
     if [[ $? == 0 ]]; then
-        echo "    ... ok"
+        let COL=70-${#MSG}
+        printf "%${COL}s\n" "OK"
     else
-        echo "    ... failed"
+        let COL=70-${#MSG}
+        printf "%${COL}s\n" "failed"
         exit
     fi
     # soyons cool avec github
@@ -52,13 +55,16 @@ do
         # si le fichier n'existe pas deja ou s'il a mal été téléchargé on le télécharge
         zip -T clementine-framework-module-$MODULE/archive/$VERSION.zip > /dev/null 2>&1;
         if [[ $? > 0 ]]; then
-            echo -n "Downloading module : $MODULE $VERSION";
+            MSG="    $MODULE $VERSION";
+            echo -n "$MSG";
             rm -f clementine-framework-module-$MODULE/archive/$VERSION.zip;
             wget -q $CLEMENTINE_REPOSITORY_URL/clementine-framework-module-$MODULE/archive/$VERSION.zip -O clementine-framework-module-$MODULE/archive/$VERSION.zip;
             if [[ $? == 0 ]]; then
-                echo "    ... ok"
+                let COL=70-${#MSG}
+                printf "%${COL}s\n" "OK"
             else
-                echo "    ... failed"
+                let COL=70-${#MSG}
+                printf "%${COL}s\n" "failed"
                 exit
             fi
             # soyons cool avec github
