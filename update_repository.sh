@@ -14,9 +14,36 @@ MODULES=`ls -d ../modules/*/trunk/.git`
 
 # on cree le dossier repository s'il n'existe pas deja et on entre dedans
 echo
-echo "Creating/updating the whole repository"
+MSG="Creating/updating the whole repository";
+echo -n "$MSG";
 mkdir -p ../repository
 cd ../repository
+if [[ $? == 0 ]]; then
+    let COL=70-${#MSG}
+    printf "%${COL}s\n" "OK"
+else
+    let COL=70-${#MSG}
+    printf "%${COL}s\n" "failed"
+    exit
+fi
+
+echo
+# recupere les scripts du module
+MSG="Getting installer";
+mkdir -p clementine-framework-installer/archive;
+mkdir -p clementine-framework-installer/master;
+echo -n "$MSG";
+wget -q $CLEMENTINE_REPOSITORY_URL/clementine-framework-installer/archive/master.zip -O clementine-framework-installer/archive/master.zip && unzip -p clementine-framework-installer/archive/master.zip clementine-framework-installer-master/install_latest.txt > clementine-framework-installer/master/install_latest.txt
+if [[ $? == 0 ]]; then
+    let COL=70-${#MSG}
+    printf "%${COL}s\n" "OK"
+else
+    let COL=70-${#MSG}
+    printf "%${COL}s\n" "failed"
+    exit
+fi
+# soyons cool avec github
+sleep $PAUSE_TIME;
 
 echo
 echo "Getting packages scripts"
