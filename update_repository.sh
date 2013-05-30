@@ -48,6 +48,24 @@ fi
 sleep $PAUSE_TIME;
 
 echo
+MSG="Rebuilding latest release";
+echo -n "$MSG";
+mkdir -p clementine-framework;
+cd clementine-framework && wget -q $CLEMENTINE_REPOSITORY_URL/clementine-framework/archive/master.zip -O master.zip && unzip -q master.zip && \
+    cd clementine-framework-master && rmdir install && rm -f .gitmodules && cp ../../../modules/install.zip . && unzip -q install.zip && cd .. && mv clementine-framework-master clementine-framework && zip --quiet -r clementine-framework.zip clementine-framework && rm -rf clementine-framework && rm -f master.zip && cd ..
+if [[ $? == 0 ]]; then
+    let COL=70-${#MSG}
+    printf "%${COL}s\n" "OK"
+else
+    let COL=70-${#MSG}
+    printf "%${COL}s\n" "failed"
+    exit
+fi
+# soyons cool avec github
+sleep $PAUSE_TIME;
+
+
+echo
 echo "Getting packages scripts"
 for MODULE_PATH in ${MODULES[@]}
 do
