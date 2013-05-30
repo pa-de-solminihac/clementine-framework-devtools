@@ -1,6 +1,6 @@
 #!/bin/bash
 CLEMENTINE_REPOSITORY_URL="https://github.com/pa-de-solminihac"
-PAUSE_TIME=1
+PAUSE_TIME=0
 
 # recupere la liste des modules dispo dans le dossier ../modules/
 MODULES=`ls -d ../modules/*/trunk/.git`
@@ -33,7 +33,9 @@ MSG="Getting installer";
 mkdir -p clementine-framework-installer/archive;
 mkdir -p clementine-framework-installer/master;
 echo -n "$MSG";
-wget -q $CLEMENTINE_REPOSITORY_URL/clementine-framework-installer/archive/master.zip -O clementine-framework-installer/archive/master.zip && unzip -p clementine-framework-installer/archive/master.zip clementine-framework-installer-master/install_latest.txt > clementine-framework-installer/master/install_latest.txt
+wget -q $CLEMENTINE_REPOSITORY_URL/clementine-framework-installer/archive/master.zip -O clementine-framework-installer/archive/master.zip && unzip -p clementine-framework-installer/archive/master.zip clementine-framework-installer-master/install_latest.txt > clementine-framework-installer/master/install_latest.txt && \
+    # legacy : le lien de telechargement de l'installeur doit renvoyer l'installeur dans un format exploitable directement par l'utilisateur (ie. nom de dossier racine = install)
+    cd clementine-framework-installer/archive && unzip -q master.zip && mv clementine-framework-installer-master install && zip --quiet -r install.zip install && rm -rf install && mv install.zip ../../../modules/install.zip && cd ../../
 if [[ $? == 0 ]]; then
     let COL=70-${#MSG}
     printf "%${COL}s\n" "OK"
@@ -77,6 +79,7 @@ do
     mkdir -p clementine-framework-module-$MODULE/archive;
     # recupere toutes les versions dispo du module
     VERSIONS_DISPO=$(zip --show-files clementine-framework-module-$MODULE-scripts/archive/master.zip | grep "/versions/." | cut -d"/" -f 3 | sort -V | uniq)
+    DID_RECUP=0
     for VERSION in ${VERSIONS_DISPO[@]};
     do
         # si le fichier n'existe pas deja ou s'il a mal été téléchargé on le télécharge
@@ -94,12 +97,16 @@ do
                 printf "%${COL}s\n" "failed"
                 exit
             fi
+            DID_RECUP=1
             # soyons cool avec github
             sleep $PAUSE_TIME;
         # else
             # echo "Skipping module : $MODULE $VERSION, already ok";
         fi
     done;
+    if [[ $DID_RECUP == 0 ]]; then
+        echo "    nothing new"
+    fi
 done
 
 # retour au repertoire d'origine
