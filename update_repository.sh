@@ -72,6 +72,7 @@ done
 
 echo
 echo "Getting packages versions"
+DID_RECUP=0
 for MODULE_PATH in ${MODULES[@]}
 do
     # MODULE="${MODULE_PATH:11:-11}";
@@ -79,7 +80,6 @@ do
     mkdir -p clementine-framework-module-$MODULE/archive;
     # recupere toutes les versions dispo du module
     VERSIONS_DISPO=$(zip --show-files clementine-framework-module-$MODULE-scripts/archive/master.zip | grep "/versions/." | cut -d"/" -f 3 | sort -V | uniq)
-    DID_RECUP=0
     for VERSION in ${VERSIONS_DISPO[@]};
     do
         # si le fichier n'existe pas deja ou s'il a mal été téléchargé on le télécharge
@@ -104,10 +104,10 @@ do
             # echo "Skipping module : $MODULE $VERSION, already ok";
         fi
     done;
-    if [[ $DID_RECUP == 0 ]]; then
-        echo "    nothing new"
-    fi
 done
+if [[ $DID_RECUP == 0 ]]; then
+    echo "    nothing new"
+fi
 
 # retour au repertoire d'origine
 cd ../devtools
