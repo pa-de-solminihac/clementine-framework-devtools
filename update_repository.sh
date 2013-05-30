@@ -1,9 +1,13 @@
 #!/bin/bash
-CLEMENTINE_REPOSITORY_URL="https://github.com/pa-de-solminihac"
+CLEMENTINE_REPOSITORY_URL="https://github.com/pa-de-solminihac" # en dur lors des appels avec parallel
 PAUSE_TIME=0
 
+# detecte si GNU Paralllel est disponible
+which parallel
+NOPARALLEL=$?
+
 # recupere la liste des modules dispo dans le dossier ../modules/
-MODULES=`ls -d ../modules/*/trunk/.git`
+MODULES=`ls -d ../modules/*/trunk/.git | sed 's/^...........//g' | sed 's/...........$//g'`
 
 # TODO: faire prendre en compte les arguments suivants
 #--package           : ne recupere que le package X
@@ -64,29 +68,49 @@ fi
 # soyons cool avec github
 sleep $PAUSE_TIME;
 
-
 echo
 echo "Getting packages scripts"
-for MODULE_PATH in ${MODULES[@]}
-do
-    # MODULE="${MODULE_PATH:11:-11}";
-    MODULE=$(echo "${MODULE_PATH:11}" | sed 's/...........$//');
-    # recupere les scripts du module
-    mkdir -p clementine-framework-module-$MODULE-scripts/archive;
-    MSG="    $MODULE";
-    echo -n "$MSG";
-    wget -q $CLEMENTINE_REPOSITORY_URL/clementine-framework-module-$MODULE-scripts/archive/master.zip -O clementine-framework-module-$MODULE-scripts/archive/master.zip;
-    if [[ $? == 0 ]]; then
-        let COL=70-${#MSG}
-        printf "%${COL}s\n" "OK"
-    else
-        let COL=70-${#MSG}
-        printf "%${COL}s\n" "failed"
-        exit
-    fi
-    # soyons cool avec github
-    sleep $PAUSE_TIME;
-done
+if [[ $NOPARALLEL == 0 ]];
+then
+    # parallel downloads
+    echo ${MODULES[@]} | sed 's/ /\n/g' | parallel -j8 '
+        CLEMENTINE_REPOSITORY_URL="https://github.com/pa-de-solminihac";
+        mkdir -p clementine-framework-module-{}-scripts/archive;
+        MSG="    {}";
+        echo -n "$MSG";
+        wget -q $CLEMENTINE_REPOSITORY_URL/clementine-framework-module-{}-scripts/archive/master.zip -O clementine-framework-module-{}-scripts/archive/master.zip;
+        if [[ $? == 0 ]]; then
+            let COL=70-${#MSG}
+            printf "%${COL}s\n" "OK"
+        else
+            let COL=70-${#MSG}
+            printf "%${COL}s\n" "failed"
+            exit
+        fi
+    '
+else
+    # sequential downloads
+    for MODULE_PATH in ${MODULES[@]}
+    do
+        # MODULE="${MODULE_PATH:11:-11}";
+        MODULE=$(echo "${MODULE_PATH:11}" | sed 's/...........$//');
+        # recupere les scripts du module
+        mkdir -p clementine-framework-module-$MODULE-scripts/archive;
+        MSG="    $MODULE";
+        echo -n "$MSG";
+        wget -q $CLEMENTINE_REPOSITORY_URL/clementine-framework-module-$MODULE-scripts/archive/master.zip -O clementine-framework-module-$MODULE-scripts/archive/master.zip;
+        if [[ $? == 0 ]]; then
+            let COL=70-${#MSG}
+            printf "%${COL}s\n" "OK"
+        else
+            let COL=70-${#MSG}
+            printf "%${COL}s\n" "failed"
+            exit
+        fi
+        # soyons cool avec github
+        sleep $PAUSE_TIME;
+    done
+fi
 
 echo
 echo "Getting packages versions"
