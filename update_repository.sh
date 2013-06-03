@@ -3,7 +3,7 @@ CLEMENTINE_REPOSITORY_URL="https://github.com/pa-de-solminihac" # en dur lors de
 PAUSE_TIME=0
 
 # detecte si GNU Paralllel est disponible
-which parallel
+which parallel > /dev/null
 NOPARALLEL=$?
 
 # recupere la liste des modules dispo dans le dossier ../modules/
@@ -90,10 +90,8 @@ then
     '
 else
     # sequential downloads
-    for MODULE_PATH in ${MODULES[@]}
+    for MODULE in ${MODULES[@]}
     do
-        # MODULE="${MODULE_PATH:11:-11}";
-        MODULE=$(echo "${MODULE_PATH:11}" | sed 's/...........$//');
         # recupere les scripts du module
         mkdir -p clementine-framework-module-$MODULE-scripts/archive;
         MSG="    $MODULE";
@@ -115,10 +113,8 @@ fi
 echo
 echo "Getting packages versions"
 DID_RECUP=0
-for MODULE_PATH in ${MODULES[@]}
+for MODULE in ${MODULES[@]}
 do
-    # MODULE="${MODULE_PATH:11:-11}";
-    MODULE=$(echo "${MODULE_PATH:11}" | sed 's/...........$//');
     mkdir -p clementine-framework-module-$MODULE/archive;
     # recupere toutes les versions dispo du module
     VERSIONS_DISPO=$(zip --show-files clementine-framework-module-$MODULE-scripts/archive/master.zip | grep "/versions/." | cut -d"/" -f 3 | sort -V | uniq)
