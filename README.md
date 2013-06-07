@@ -24,5 +24,5 @@ Pour publier une nouvelle version du module ```users```, dont les sources sont d
 * préciser le numéro de version de la nouvelle version ```N.m``` dans ```etc/module.ini```. (TODO: comment choisir un numéro de version ? ```N``` et ```m``` sont des entiers)
 * si la nouvelle version nécessite d'exécuter un script d'upgrade, il faut le créer dans ```/modules/users/repository/scripts/N.m/upgrade.php``` (où ```N.m``` est le numéro de version)
 * aller dans le dossier devtools : ```cd ../../../devtools/```
-* créer la nouvelle version : ```./create_package.sh users N.m```
+* créer la nouvelle version : ```./create_package.sh users N.m``` (où ```N.m``` est le numéro de version)
 * c'est presque fini, il suffit de suivre les indications...
