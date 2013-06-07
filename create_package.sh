@@ -52,12 +52,20 @@ cd ../modules/$PACKAGE && \
 
 cat <<EOF
 
-TODO :
+# C'est presque prêt, il faut maintenant lancer les commandes suivante :
+
 cd ../modules/$PACKAGE/trunk
-(...)
 git commit -a
-(ou git add stuff et git commit stuff)
-(...)
+
+# mettre un message de commit de la forme :
+# MODULE N.m
+#
+# par exemple :
+#
+# USERS 4.9
+# Amélioration de la procédure de renouvellement de mot de passe
+# Messages plus clairs, meilleure cinématique, alerte l'utilisateur si son compte est désactivé.
+
 git tag -a $VERSION -m "version $VERSION"
 git push
 git push --tags
@@ -65,8 +73,10 @@ cd ../repository/scripts
 git push
 cd ../../../../devtools
 
-RAPPEL : 
-    le fichier module/.../etc/module.ini est destiné au site, et contient les dépendances pour LA version X du module
+# Il faut maintenant aller mettre à jour le dépot sur clementine.quai13.com :
+# on se connecte en SSH
+cd www/devtools
+git pull; ./update_repository.sh
 
 EOF
 
