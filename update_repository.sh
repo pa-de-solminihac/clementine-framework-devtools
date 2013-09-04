@@ -70,25 +70,8 @@ sleep $PAUSE_TIME;
 
 echo
 echo "Getting packages scripts"
-if [[ $NOPARALLEL == 0 ]];
+if [[ $NOPARALLEL > 0 ]];
 then
-    # parallel downloads
-    echo ${MODULES[@]} | sed 's/ /\n/g' | parallel -j8 '
-        CLEMENTINE_REPOSITORY_URL="https://github.com/pa-de-solminihac";
-        mkdir -p clementine-framework-module-{}-scripts/archive;
-        MSG="    {}";
-        echo -n "$MSG";
-        wget -q $CLEMENTINE_REPOSITORY_URL/clementine-framework-module-{}-scripts/archive/master.zip -O clementine-framework-module-{}-scripts/archive/master.zip;
-        if [[ $? == 0 ]]; then
-            let COL=70-${#MSG}
-            printf "%${COL}s\n" "OK"
-        else
-            let COL=70-${#MSG}
-            printf "%${COL}s\n" "failed"
-            exit
-        fi
-    '
-else
     # sequential downloads
     for MODULE in ${MODULES[@]}
     do
@@ -108,6 +91,23 @@ else
         # soyons cool avec github
         sleep $PAUSE_TIME;
     done
+else
+    # parallel downloads
+    echo ${MODULES[@]} | sed 's/ /\n/g' | parallel --gnu -j8 '
+        CLEMENTINE_REPOSITORY_URL="https://github.com/pa-de-solminihac";
+        mkdir -p clementine-framework-module-{}-scripts/archive;
+        MSG="    {}";
+        echo -n "$MSG";
+        wget -q $CLEMENTINE_REPOSITORY_URL/clementine-framework-module-{}-scripts/archive/master.zip -O clementine-framework-module-{}-scripts/archive/master.zip;
+        if [[ $? == 0 ]]; then
+            let COL=70-${#MSG}
+            printf "%${COL}s\n" "OK"
+        else
+            let COL=70-${#MSG}
+            printf "%${COL}s\n" "failed"
+            exit
+        fi
+    '
 fi
 
 echo
