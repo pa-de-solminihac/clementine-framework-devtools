@@ -19,3 +19,7 @@ do
     (cd ${repo} && cd ../../trunk && git pull | grep -v "Already up-to-date")
     (cd ${repo} && cd ../../repository/scripts && git pull | grep -v "Already up-to-date")
 done
+
+echo
+echo "Update repository"
+./update_repository.sh
