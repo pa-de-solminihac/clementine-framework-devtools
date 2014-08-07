@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 path_to_devtools="$(dirname "$0")"
-pushd $path_to_devtools; > /dev/null
+pushd $path_to_devtools > /dev/null
 echo "Update DEVTOOLS"
 (git pull | grep -v "Already up-to-date")
 
