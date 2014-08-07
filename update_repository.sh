@@ -7,7 +7,7 @@ which parallel > /dev/null
 NOPARALLEL=$?
 
 # recupere la liste des modules dispo dans le dossier ../modules/
-MODULES=`ls -d ../modules/*/trunk/.git | sed 's/^...........//g' | sed 's/...........$//g'`
+MODULES="$(ls -d ../modules/*/trunk/.git | sed 's/^...........//g' | sed 's/...........$//g')"
 
 # TODO: faire prendre en compte les arguments suivants
 #--package           : ne recupere que le package X
@@ -93,7 +93,7 @@ then
     done
 else
     # parallel downloads
-    echo ${MODULES[@]} | sed 's/ /\n/g' | parallel --gnu -j8 '
+    echo "${MODULES[@]}" | parallel --no-notice --gnu -j8 '
         CLEMENTINE_REPOSITORY_URL="https://github.com/pa-de-solminihac";
         mkdir -p clementine-framework-module-{}-scripts/archive;
         MSG="    {}";
@@ -117,7 +117,7 @@ for MODULE in ${MODULES[@]}
 do
     mkdir -p clementine-framework-module-$MODULE/archive;
     # recupere toutes les versions dispo du module
-    VERSIONS_DISPO=$(zip --show-files clementine-framework-module-$MODULE-scripts/archive/master.zip | grep "/versions/." | cut -d"/" -f 3 | sort -V | uniq)
+    VERSIONS_DISPO=$(zip --show-files clementine-framework-module-$MODULE-scripts/archive/master.zip | grep "/versions/." | cut -d"/" -f 3 | sort -t. -k 1,1n -k 2,2n -k 3,3n -k 4,4n | uniq)
     for VERSION in ${VERSIONS_DISPO[@]};
     do
         # si le fichier n'existe pas deja ou s'il a mal été téléchargé on le télécharge
