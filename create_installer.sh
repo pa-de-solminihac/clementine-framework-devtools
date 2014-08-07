@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 usage() {
 
@@ -22,9 +22,9 @@ then
 fi
 
 # date '+%Y%m%d%H%M%S' > ../modules/install_latest.txt && /bin/cp ../modules/install_latest.txt ../www/install/install_version.txt && cp -pr ../www/install . && rm -rf install/config.php install/tmp && zip -r install.zip install -x *.svn* *.git* config.php && rm -rf install && mv install.zip ../modules/install.zip
-pushd ../www/install
+pushd ../www/install > /dev/null
 date '+%Y%m%d%H%M%S' > install_latest.txt && /bin/cp -pr install_latest.txt install_version.txt && git add install_latest.txt install_version.txt 
-popd
+popd > /dev/null
 echo "Il ne reste plus qu'a committer les modifs :"
 echo "cd ../www/install"
 echo "git add stuff"
