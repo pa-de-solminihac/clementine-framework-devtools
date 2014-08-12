@@ -8,15 +8,24 @@ echo
 if [[ $REPLY =~ ^[YyOo]$ ]]
 then
 
+    echo
+    echo "=========================="
+    echo "Création de l'arborescence"
+    echo "=========================="
+    echo
     mkdir -p clementine
     cd clementine &&  mkdir -p www modules releases repository
 
     # structure
     git clone git@github.com:pa-de-solminihac/clementine-framework-installer.git www/install && \
     git clone git@github.com:pa-de-solminihac/clementine-framework www/trunk && \
-    # obsolete
-    # git clone git@github.com:pa-de-solminihac/clementine-framework-releases ../releases
     git clone git@github.com:pa-de-solminihac/clementine-framework-devtools devtools && \
+
+    echo
+    echo "==================================="
+    echo "Récupération des dépôts des modules"
+    echo "==================================="
+    echo
 
     # modules
     # generer la liste : find modules -type d -name '.git' | awk -F"/" '{print $2}' | sort | uniq
@@ -90,9 +99,12 @@ then
     git clone git@github.com:pa-de-solminihac/clementine-framework-module-users modules/users/trunk && \
     git clone git@github.com:pa-de-solminihac/clementine-framework-module-users-scripts modules/users/repository/scripts && \
 
-    echo && \
-    echo "Fin des clone."
+    echo
+    echo "========================="
+    echo "Mise à jour du repository"
+    echo "========================="
+    echo
 
-    echo "Maintenant il faut aller dans le dossier devtools et lancer ./update_repository.sh"
+    cd devtools && ./update_repository.sh
 
 fi

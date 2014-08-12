@@ -1,6 +1,6 @@
 #!/bin/bash
 CLEMENTINE_REPOSITORY_URL="https://github.com/pa-de-solminihac" # en dur lors des appels avec parallel
-PAUSE_TIME=0
+PAUSE_TIME=1
 
 # detecte si GNU Paralllel est disponible
 which parallel > /dev/null
