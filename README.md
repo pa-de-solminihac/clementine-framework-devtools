@@ -7,10 +7,10 @@ Copier coller cette ligne dans un terminal.
 curl -sS https://raw.githubusercontent.com/pa-de-solminihac/clementine-framework-devtools/master/init_devroot.sh -o init_devroot.sh && chmod u+x init_devroot.sh && ./init_devroot.sh
 ```
 
-==
+Le script va créer l'arborescence nécessaire dans un dossier __clementine__ et y installer les outils nécessaires à la gestion de votre propre dépôt.
 
 
-Clementine Framework Devtools
+Explications sur l'arborescence
 ===
 
 Structure attendue pour le dossier de dev de Clementine (contenant repository, devtools, installeur, arborescence, modules share...) :
@@ -29,7 +29,7 @@ Structure attendue pour le dossier de dev de Clementine (contenant repository, d
 
 
 Publication d'une nouvelle version d'un module
----
+===
 
 Pour publier une nouvelle version du module ```users```, dont les sources sont dans le dossier ```/modules/users/trunk``` :
 
