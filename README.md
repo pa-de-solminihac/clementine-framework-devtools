@@ -1,3 +1,14 @@
+Installation
+===
+
+```bash
+curl -sS https://raw.githubusercontent.com/pa-de-solminihac/clementine-framework-devtools/master/init_devroot.sh -o init_devroot.sh && chmod u+x init_devroot.sh
+./init_devroot.sh
+```
+
+==
+
+
 Clementine Framework Devtools
 ===
 
