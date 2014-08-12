@@ -9,7 +9,7 @@ curl -sS https://raw.githubusercontent.com/pa-de-solminihac/clementine-framework
 
 Le script va créer l'arborescence nécessaire dans un dossier __clementine__ et y installer les outils nécessaires à la gestion de votre propre dépôt.
 
-__Remarque__ : il est conseillé d'installer GNU parallel pour que le script puisse lancer les téléchargements en parallèle.
+__Remarque__ : il est conseillé d'installer [GNU parallel](http://www.gnu.org/software/parallel/) pour que le script puisse lancer les téléchargements en parallèle.
 
 Explications sur l'arborescence
 ===
