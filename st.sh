@@ -1,19 +1,19 @@
 #!/usr/bin/env bash
 path_to_devtools="$(dirname "$0")"
 pushd $path_to_devtools > /dev/null
-echo "Update DEVTOOLS"
+echo "Status DEVTOOLS"
 (git status -sb | grep -v '## master')
 
 echo
-echo "Update INSTALLER"
+echo "Status INSTALLER"
 (cd ../www/install && git status -sb | grep -v '## master')
 
 echo
-echo "Update WWW"
+echo "Status WWW"
 (cd ../www/trunk && git status -sb | grep -v '## master')
 
 echo
-echo "Update modules"
+echo "Status modules"
 g=`ls -d ../modules/*/trunk/.git`
 for repo in ${g[@]}
 do
