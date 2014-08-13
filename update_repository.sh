@@ -3,6 +3,8 @@ CLEMENTINE_REPOSITORY_URL="https://github.com/pa-de-solminihac" # en dur lors de
 PAUSE_TIME=1
 
 # detecte si GNU Paralllel est disponible
+# O. Tange (2011): GNU Parallel - The Command-Line Power Tool,
+# ;login: The USENIX Magazine, February 2011:42-47.
 which parallel > /dev/null
 NOPARALLEL=$?
 
@@ -93,7 +95,7 @@ then
     done
 else
     # parallel downloads
-    echo "${MODULES[@]}" | parallel --no-notice --gnu -j8 '
+    echo "${MODULES[@]}" | parallel --gnu -j8 '
         CLEMENTINE_REPOSITORY_URL="https://github.com/pa-de-solminihac";
         mkdir -p clementine-framework-module-{}-scripts/archive;
         MSG="    {}";
