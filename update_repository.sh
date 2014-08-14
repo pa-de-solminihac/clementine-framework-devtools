@@ -1,5 +1,4 @@
 #!/bin/bash
-CLEMENTINE_REPOSITORY_URL="https://github.com/pa-de-solminihac" # en dur lors des appels avec parallel
 PAUSE_TIME=1
 
 # detecte si GNU Paralllel est disponible
@@ -39,7 +38,12 @@ MSG="Getting installer";
 mkdir -p clementine-framework-installer/archive;
 mkdir -p clementine-framework-installer/master;
 echo -n "$MSG";
-wget -q $CLEMENTINE_REPOSITORY_URL/clementine-framework-installer/archive/master.zip -O clementine-framework-installer/archive/master.zip && unzip -p clementine-framework-installer/archive/master.zip clementine-framework-installer-master/install_latest.txt > clementine-framework-installer/master/install_latest.txt && \
+
+cd ../www/install/
+CLEMENTINE_INSTALLER_REPOSITORY_URL=$(git config --get remote.origin.url | sed 's/.git$//' | sed 's/git@github.com:/https:\/\/github.com\//g')
+cd - > /dev/null
+
+wget -q $CLEMENTINE_INSTALLER_REPOSITORY_URL/archive/master.zip -O clementine-framework-installer/archive/master.zip && unzip -p clementine-framework-installer/archive/master.zip clementine-framework-installer-master/install_latest.txt > clementine-framework-installer/master/install_latest.txt && \
     # legacy : le lien de telechargement de l'installeur doit renvoyer l'installeur dans un format exploitable directement par l'utilisateur (ie. nom de dossier racine = install)
     cd clementine-framework-installer/archive && unzip -q master.zip && mv clementine-framework-installer-master install && zip --quiet -r install.zip install && rm -rf install && mv install.zip ../../../modules/install.zip && cd ../../
 if [[ $? == 0 ]]; then
@@ -56,8 +60,13 @@ sleep $PAUSE_TIME;
 echo
 MSG="Rebuilding latest release";
 echo -n "$MSG";
+
+cd ../www/trunk/
+CLEMENTINE_TRUNK_REPOSITORY_URL=$(git config --get remote.origin.url | sed 's/.git$//' | sed 's/git@github.com:/https:\/\/github.com\//g')
+cd - > /dev/null
+
 mkdir -p clementine-framework;
-cd clementine-framework && wget -q $CLEMENTINE_REPOSITORY_URL/clementine-framework/archive/master.zip -O master.zip && unzip -q master.zip && \
+cd clementine-framework && wget -q $CLEMENTINE_TRUNK_REPOSITORY_URL/archive/master.zip -O master.zip && unzip -q master.zip && \
     cd clementine-framework-master && rmdir install && rm -f .gitmodules && cp ../../../modules/install.zip . && unzip -q install.zip && cd .. && mv clementine-framework-master clementine-framework && zip --quiet -r clementine-framework.zip clementine-framework && rm -rf clementine-framework && rm -f master.zip && cd ..
 if [[ $? == 0 ]]; then
     let COL=70-${#MSG}
@@ -81,7 +90,12 @@ then
         mkdir -p clementine-framework-module-$MODULE-scripts/archive;
         MSG="    $MODULE";
         echo -n "$MSG";
-        wget -q $CLEMENTINE_REPOSITORY_URL/clementine-framework-module-$MODULE-scripts/archive/master.zip -O clementine-framework-module-$MODULE-scripts/archive/master.zip;
+
+        cd ../modules/$MODULE/repository/scripts/
+        CLEMENTINE_CURRENT_MODULE_SCRIPTS_REPOSITORY_URL=$(git config --get remote.origin.url | sed "s/.git$//" | sed "s/git@github.com:/https:\/\/github.com\//g")
+        cd - > /dev/null
+
+        wget -q $CLEMENTINE_CURRENT_MODULE_SCRIPTS_REPOSITORY_URL/archive/master.zip -O clementine-framework-module-$MODULE-scripts/archive/master.zip;
         if [[ $? == 0 ]]; then
             let COL=70-${#MSG}
             printf "%${COL}s\n" "OK"
@@ -96,11 +110,15 @@ then
 else
     # parallel downloads
     echo "${MODULES[@]}" | parallel --gnu -j8 '
-        CLEMENTINE_REPOSITORY_URL="https://github.com/pa-de-solminihac";
         mkdir -p clementine-framework-module-{}-scripts/archive;
         MSG="    {}";
         echo -n "$MSG";
-        wget -q $CLEMENTINE_REPOSITORY_URL/clementine-framework-module-{}-scripts/archive/master.zip -O clementine-framework-module-{}-scripts/archive/master.zip;
+
+        cd ../modules/{}/repository/scripts/
+        CLEMENTINE_CURRENT_MODULE_SCRIPTS_REPOSITORY_URL=$(git config --get remote.origin.url | sed "s/.git$//" | sed "s/git@github.com:/https:\/\/github.com\//g")
+        cd - > /dev/null
+
+        wget -q $CLEMENTINE_CURRENT_MODULE_SCRIPTS_REPOSITORY_URL/archive/master.zip -O clementine-framework-module-{}-scripts/archive/master.zip;
         if [[ $? == 0 ]]; then
             let COL=70-${#MSG}
             printf "%${COL}s\n" "OK"
@@ -128,7 +146,12 @@ do
             MSG="    $MODULE $VERSION";
             echo -n "$MSG";
             rm -f clementine-framework-module-$MODULE/archive/$VERSION.zip;
-            wget -q $CLEMENTINE_REPOSITORY_URL/clementine-framework-module-$MODULE/archive/$VERSION.zip -O clementine-framework-module-$MODULE/archive/$VERSION.zip;
+
+            cd ../modules/$MODULE/trunk/
+            CLEMENTINE_CURRENT_MODULE_REPOSITORY_URL=$(git config --get remote.origin.url | sed 's/.git$//' | sed 's/git@github.com:/https:\/\/github.com\//g')
+            cd - > /dev/null
+
+            wget -q $CLEMENTINE_CURRENT_MODULE_REPOSITORY_URL/archive/$VERSION.zip -O clementine-framework-module-$MODULE/archive/$VERSION.zip;
             if [[ $? == 0 ]]; then
                 let COL=70-${#MSG}
                 printf "%${COL}s\n" "OK"
