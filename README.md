@@ -14,20 +14,17 @@ __Performances__ : il est conseillé d'installer [GNU parallel](http://www.gnu.o
 Explications sur l'arborescence
 ===
 
-Structure attendue pour le dossier de dev de Clementine (contenant repository, devtools, installeur, arborescence, modules share...) :
+Le développement du framework Clémentine est organisé selon une arborescence précise : 
 
-```/devtools``` : contient les scripts de developpement
+```/repository``` : c'est le repository utilisé par l'installeur des projets Clémentine. Il sert à distribuer les modules share. Il est rempli automatiquement par le biais du script ```/devtools/update_repository.sh```
 
-```/modules/*``` : chaque dossier module contient 2 dossiers : ```trunk``` pour la branche de dev, et ```repository/scripts``` pour les scripts d'upgrades et informations sur les dépendances du module. 
+```/modules/*``` : contient les dépots des modules share. Chaque dossier `/modules/`_module_`/` contient 2 sous-dossiers : ```trunk``` pour le dépôt centralisant les développements du module (les releases sont créées parle biais de tags), et ```repository/scripts``` pour le dépôt contenant les scripts d'upgrades ainsi que les informations sur les dépendances du module. 
 
-```/www/install``` : branche de dev de l'installeur
+```/www/install``` : dépôt pour le dévelloppement de l'installeur
 
-```/www/trunk``` : branche de dev de la structure du framework
+```/www/trunk``` : dépôt pour la structure du framework (ie. l'arborescence qu'on créée pour tout nouveau projet Clémentine)
 
-```/releases``` : rempli automatiquement par le script ```/devtools/create_release.sh```. Il contient un zip de la dernière release du framework.
-
-```/repository``` : rempli automatiquement par le script ```/devtools/update_repository.sh```
-
+```/devtools``` : contient les outils qu'on utilise lors du développement du framework, par exemple pour publier les packages (nouvelle release d'un module/du framework/de l'installeur, synchronisation du repository, et divers outils pour se faciliter la vie)
 
 Publication d'une nouvelle version d'un module
 ===
