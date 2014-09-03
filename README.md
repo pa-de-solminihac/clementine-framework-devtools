@@ -36,4 +36,3 @@ Pour publier une nouvelle version du module ```users```, dont les sources sont d
 * aller dans le dossier devtools : ```cd ../../../devtools/```
 * créer la nouvelle version : ```./create_package.sh users N.m``` (où ```N.m``` est le numéro de version)
 * c'est presque fini, il suffit de suivre les indications...
-
