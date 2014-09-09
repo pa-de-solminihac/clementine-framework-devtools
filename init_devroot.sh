@@ -20,6 +20,7 @@ then
     git clone git@github.com:pa-de-solminihac/clementine-framework-installer.git www/install && \
     git clone git@github.com:pa-de-solminihac/clementine-framework www/trunk && \
     git clone git@github.com:pa-de-solminihac/clementine-framework-devtools devtools && \
+    git clone git@github.com:pa-de-solminihac/clementine-framework-git-hooks git-hooks && \
 
     echo
     echo "==================================="

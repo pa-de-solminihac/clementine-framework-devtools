@@ -5,6 +5,10 @@ echo "Status DEVTOOLS"
 (git status -sb | grep -v '## master')
 
 echo
+echo "Status GIT-HOOKS"
+(cd ../git-hooks && git status -sb | grep -v '## master')
+
+echo
 echo "Status INSTALLER"
 (cd ../www/install && git status -sb | grep -v '## master')
 

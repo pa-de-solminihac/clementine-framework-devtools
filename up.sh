@@ -5,6 +5,10 @@ echo "Update DEVTOOLS"
 (git pull | grep -v "Already up-to-date")
 
 echo
+echo "Update GIT-HOOKS"
+(cd ../git-hooks && git pull | grep -v "Already up-to-date")
+
+echo
 echo "Update INSTALLER"
 (cd ../www/install && git pull | grep -v "Already up-to-date")
 
