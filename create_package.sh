@@ -36,7 +36,7 @@ cd ../modules/$PACKAGE && \
     # rm -rf $PACKAGE && \
     # mv $PACKAGE-$VERSION.zip repository/src/ && \
     cd repository/scripts && \
-    mkdir --parents versions/$VERSION && \
+    mkdir -p versions/$VERSION && \
     touch versions/$VERSION/.gitignore && \
     # rm -rf scripts.zip && \
     # zip -r scripts.zip scripts -x *.svn* *.git* && \
