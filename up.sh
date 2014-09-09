@@ -10,7 +10,7 @@ echo "Update INSTALLER"
 
 echo
 echo "Update WWW"
-(cd ../www/trunk && git pull | grep -v "Already up-to-date")
+(cd ../www/trunk && git pull | grep -v "Already up-to-date" && git submodule update && git submodule foreach git pull | grep -v "Already up-to-date")
 
 echo
 echo "Update modules"
