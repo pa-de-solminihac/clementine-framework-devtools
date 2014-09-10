@@ -1,23 +1,27 @@
 #!/usr/bin/env bash
+RED=`echo -e '\033[0m\033[1;31m'`
+DEEPGREEN=`echo -e '\033[0m\033[32m'`
+GREEN=`echo -e '\033[0m\033[1;32m'`
+NORMAL=`echo -e '\033[0m'`
 path_to_devtools="$(dirname "$0")"
 pushd $path_to_devtools > /dev/null
-echo "Status DEVTOOLS"
+echo "${DEEPGREEN}Status DEVTOOLS${NORMAL}"
 (git -c color.ui=always status -sb | grep -v '## ')
 
 echo
-echo "Status GIT-HOOKS"
+echo "${DEEPGREEN}Status GIT-HOOKS${NORMAL}"
 (cd ../git-hooks && git -c color.ui=always status -sb | grep -v '## ')
 
 echo
-echo "Status INSTALLER"
+echo "${DEEPGREEN}Status INSTALLER${NORMAL}"
 (cd ../www/install && git -c color.ui=always status -sb | grep -v '## ')
 
 echo
-echo "Status WWW"
+echo "${DEEPGREEN}Status WWW${NORMAL}"
 (cd ../www/trunk && git -c color.ui=always status -sb | grep -v '## ')
 
 echo
-echo "Status modules"
+echo "${DEEPGREEN}Status modules${NORMAL}"
 g=`ls -d ../modules/*/trunk/.git`
 for repo in ${g[@]}
 do
