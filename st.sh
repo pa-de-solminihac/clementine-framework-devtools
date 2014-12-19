@@ -28,8 +28,8 @@ for repo in ${g[@]}
 do
     module_name="$(echo "$repo" | cut -d "/" -f 3)"
     echo "  $module_name"
-    (cd $repo && cd ../../trunk && $GIT status -sb | grep -v '## ' | sed 's/^/    /g')
-    # echo " - $module_name (scripts)" 
+    (cd $repo && cd ../../trunk && $GIT status -sb | grep -v '## ' | sed 's/^/    /g' && git log --oneline $(git describe --abbrev=0 --tags).. | sed 's/^/    /g')
+    # echo " - $module_name (scripts)"
     (cd $repo && cd ../../repository/scripts && $GIT status -sb | grep -v '## ' | sed 's/^/    /g')
 done
 
