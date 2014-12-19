@@ -8,7 +8,7 @@ usage() {
 Cree un fichier zip pour le package <package> à partir de sa branche trunk par défaut (ie. à partir du dossier /clementine/modules/<package>/trunk)
 
     <package> est le nom du package
-    <version> est le numéro de version (format X.y) du package à créer 
+    <version> est le numéro de version (format X.y) du package à créer
     [dir_src] est le sous dossier de /clementine/modules/<package>/ qui contient les sources du module. Par défaut, c'est trunk
 
     Le résultat sera /clementine/modules/<package>/repository/src/<package>-<version>.zip
@@ -51,6 +51,8 @@ cd ../modules/$PACKAGE && \
 # cd ../devtools && ./update_package_scripts.sh $PACKAGE $VERSION
 
 cat <<EOF
+
+# Penser à lancer up.sh afin de récupérer les paquets à jour !
 
 # C'est presque prêt, il faut maintenant lancer les commandes suivante :
 
