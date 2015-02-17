@@ -75,7 +75,8 @@ cat <<EOF
 
 cd ../modules/$PACKAGE/trunk
 git pull
-git commit -a
+git add --all
+git commit
 
 #================================================
 # C'est le moment d'écrire le message de commit !
