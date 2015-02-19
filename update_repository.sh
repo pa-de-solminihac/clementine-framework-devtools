@@ -71,7 +71,7 @@ cd - > /dev/null
 
 mkdir -p clementine-framework;
 cd clementine-framework && wget -q $CLEMENTINE_TRUNK_REPOSITORY_URL/archive/master.zip -O master.zip && unzip -q master.zip && \
-    cd clementine-framework-master && rmdir install && rm -f .gitmodules && cp ../../../modules/install.zip . && unzip -q install.zip && cd .. && mv clementine-framework-master clementine-framework && zip --quiet -r clementine-framework.zip clementine-framework && rm -rf clementine-framework && rm -f master.zip && cd ..
+    cd clementine-framework-master && rmdir install && rm -f .gitmodules && cp ../../../modules/install.zip . && unzip -q install.zip && rm -f install.zip && cd .. && mv clementine-framework-master clementine-framework && zip --quiet -r clementine-framework.zip clementine-framework && rm -rf clementine-framework && rm -f master.zip && cd ..
 if [[ $? == 0 ]]; then
     let COL=83-${#MSG}
     printf "%${COL}s\n" "OK"
