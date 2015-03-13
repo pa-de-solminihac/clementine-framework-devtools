@@ -91,46 +91,58 @@ then
     # sequential downloads
     for MODULE in ${MODULES[@]}
     do
-        # recupere les scripts du module
-        mkdir -p clementine-framework-module-$MODULE-scripts/archive;
-        MSG="    $MODULE";
-        echo -n "$MSG";
+        if [ -d "../modules/$MODULE" ];
+        then
 
-        cd ../modules/$MODULE/repository/scripts/
-        CLEMENTINE_CURRENT_MODULE_SCRIPTS_REPOSITORY_URL=$(git config --get remote.origin.url | sed "s/.git$//" | sed "s/git@github.com:/https:\/\/github.com\//g")
-        cd - > /dev/null
+            # recupere les scripts du module
+            mkdir -p clementine-framework-module-$MODULE-scripts/archive;
+            MSG="    $MODULE";
+            echo -n "$MSG";
 
-        wget -q $CLEMENTINE_CURRENT_MODULE_SCRIPTS_REPOSITORY_URL/archive/master.zip -O clementine-framework-module-$MODULE-scripts/archive/master.zip;
-        if [[ $? == 0 ]]; then
-            let COL=70-${#MSG}
-            printf "%${COL}s\n" "OK"
+            cd ../modules/$MODULE/repository/scripts/
+            CLEMENTINE_CURRENT_MODULE_SCRIPTS_REPOSITORY_URL=$(git config --get remote.origin.url | sed "s/.git$//" | sed "s/git@github.com:/https:\/\/github.com\//g")
+            cd - > /dev/null
+
+            wget -q $CLEMENTINE_CURRENT_MODULE_SCRIPTS_REPOSITORY_URL/archive/master.zip -O clementine-framework-module-$MODULE-scripts/archive/master.zip;
+            if [[ $? == 0 ]]; then
+                let COL=70-${#MSG}
+                printf "%${COL}s\n" "OK"
+            else
+                let COL=70-${#MSG}
+                printf "%${COL}s\n" "failed"
+                exit
+            fi
+            # soyons cool avec github
+            sleep $PAUSE_TIME;
         else
-            let COL=70-${#MSG}
-            printf "%${COL}s\n" "failed"
-            exit
+            echo "    $MODULE (from modules.list) is not present in ../modules/"
         fi
-        # soyons cool avec github
-        sleep $PAUSE_TIME;
+
     done
 else
     # parallel downloads
     echo "${MODULES[@]}" | parallel --gnu -j8 '
-        mkdir -p clementine-framework-module-{}-scripts/archive;
-        MSG="    {}";
-        echo -n "$MSG";
+        if [ -d "../modules/{}" ];
+        then
+            mkdir -p clementine-framework-module-{}-scripts/archive;
+            MSG="    {}";
+            echo -n "$MSG";
 
-        cd ../modules/{}/repository/scripts/
-        CLEMENTINE_CURRENT_MODULE_SCRIPTS_REPOSITORY_URL=$(git config --get remote.origin.url | sed "s/.git$//" | sed "s/git@github.com:/https:\/\/github.com\//g")
-        cd - > /dev/null
+            cd ../modules/{}/repository/scripts/
+            CLEMENTINE_CURRENT_MODULE_SCRIPTS_REPOSITORY_URL=$(git config --get remote.origin.url | sed "s/.git$//" | sed "s/git@github.com:/https:\/\/github.com\//g")
+            cd - > /dev/null
 
-        wget -q $CLEMENTINE_CURRENT_MODULE_SCRIPTS_REPOSITORY_URL/archive/master.zip -O clementine-framework-module-{}-scripts/archive/master.zip;
-        if [[ $? == 0 ]]; then
-            let COL=70-${#MSG}
-            printf "%${COL}s\n" "OK"
+            wget -q $CLEMENTINE_CURRENT_MODULE_SCRIPTS_REPOSITORY_URL/archive/master.zip -O clementine-framework-module-{}-scripts/archive/master.zip;
+            if [[ $? == 0 ]]; then
+                let COL=70-${#MSG}
+                printf "%${COL}s\n" "OK"
+            else
+                let COL=70-${#MSG}
+                printf "%${COL}s\n" "failed"
+                exit
+            fi
         else
-            let COL=70-${#MSG}
-            printf "%${COL}s\n" "failed"
-            exit
+            echo "    {} (from modules.list) is not present in ../modules/"
         fi
     '
 fi
@@ -140,38 +152,43 @@ echo "${DEEPGREEN}Getting packages versions${NORMAL}"
 DID_RECUP=0
 for MODULE in ${MODULES[@]}
 do
-    mkdir -p clementine-framework-module-$MODULE/archive;
-    # recupere toutes les versions dispo du module
-    VERSIONS_DISPO=$(zip --show-files clementine-framework-module-$MODULE-scripts/archive/master.zip | grep "/versions/." | cut -d"/" -f 3 | sort -t. -k 1,1n -k 2,2n -k 3,3n -k 4,4n | uniq)
-    for VERSION in ${VERSIONS_DISPO[@]};
-    do
-        # si le fichier n'existe pas deja ou s'il a mal été téléchargé on le télécharge
-        zip -T clementine-framework-module-$MODULE/archive/$VERSION.zip > /dev/null 2>&1;
-        if [[ $? > 0 ]]; then
-            MSG="    $MODULE $VERSION";
-            echo -n "$MSG";
-            rm -f clementine-framework-module-$MODULE/archive/$VERSION.zip;
+    if [ -d "../modules/$MODULE" ];
+    then
+        mkdir -p clementine-framework-module-$MODULE/archive;
+        # recupere toutes les versions dispo du module
+        VERSIONS_DISPO=$(zip --show-files clementine-framework-module-$MODULE-scripts/archive/master.zip | grep "/versions/." | cut -d"/" -f 3 | sort -t. -k 1,1n -k 2,2n -k 3,3n -k 4,4n | uniq)
+        for VERSION in ${VERSIONS_DISPO[@]};
+        do
+            # si le fichier n'existe pas deja ou s'il a mal été téléchargé on le télécharge
+            zip -T clementine-framework-module-$MODULE/archive/$VERSION.zip > /dev/null 2>&1;
+            if [[ $? > 0 ]]; then
+                MSG="    $MODULE $VERSION";
+                echo -n "$MSG";
+                rm -f clementine-framework-module-$MODULE/archive/$VERSION.zip;
 
-            cd ../modules/$MODULE/trunk/
-            CLEMENTINE_CURRENT_MODULE_REPOSITORY_URL=$(git config --get remote.origin.url | sed 's/.git$//' | sed 's/git@github.com:/https:\/\/github.com\//g')
-            cd - > /dev/null
+                cd ../modules/$MODULE/trunk/
+                CLEMENTINE_CURRENT_MODULE_REPOSITORY_URL=$(git config --get remote.origin.url | sed 's/.git$//' | sed 's/git@github.com:/https:\/\/github.com\//g')
+                cd - > /dev/null
 
-            wget -q $CLEMENTINE_CURRENT_MODULE_REPOSITORY_URL/archive/$VERSION.zip -O clementine-framework-module-$MODULE/archive/$VERSION.zip;
-            if [[ $? == 0 ]]; then
-                let COL=70-${#MSG}
-                printf "%${COL}s\n" "OK"
-            else
-                let COL=70-${#MSG}
-                printf "%${COL}s\n" "failed"
-                exit
+                wget -q $CLEMENTINE_CURRENT_MODULE_REPOSITORY_URL/archive/$VERSION.zip -O clementine-framework-module-$MODULE/archive/$VERSION.zip;
+                if [[ $? == 0 ]]; then
+                    let COL=70-${#MSG}
+                    printf "%${COL}s\n" "OK"
+                else
+                    let COL=70-${#MSG}
+                    printf "%${COL}s\n" "failed"
+                    exit
+                fi
+                DID_RECUP=1
+                # soyons cool avec github
+                sleep $PAUSE_TIME;
+            # else
+                # echo "Skipping module : $MODULE $VERSION, already ok";
             fi
-            DID_RECUP=1
-            # soyons cool avec github
-            sleep $PAUSE_TIME;
-        # else
-            # echo "Skipping module : $MODULE $VERSION, already ok";
-        fi
-    done;
+        done;
+    else
+        echo "    $MODULE (from modules.list) is not present in ../modules/"
+    fi
 done
 if [[ $DID_RECUP == 0 ]]; then
     echo "    nothing new"
