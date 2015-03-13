@@ -12,7 +12,7 @@ which parallel > /dev/null
 NOPARALLEL=$?
 
 # recupere la liste des modules dispo dans le dossier ../modules/
-./generate_modules.list.sh
+#./generate_modules.list.sh
 MODULES="$(cat modules.list)"
 
 # TODO: faire prendre en compte les arguments suivants

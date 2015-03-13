@@ -29,7 +29,7 @@ NOPARALLEL=$?
 
 echo
 echo "${DEEPGREEN}Update modules${NORMAL}"
-./generate_modules.list.sh
+#./generate_modules.list.sh
 MODULES="$(cat modules.list)"
 if [[ $NOPARALLEL > 0 ]];
 then
