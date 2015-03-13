@@ -29,22 +29,23 @@ NOPARALLEL=$?
 
 echo
 echo "${DEEPGREEN}Update modules${NORMAL}"
-g=`ls -d ../modules/*/trunk/.git`
+./generate_modules.list.sh
+MODULES="$(cat modules.list)"
 if [[ $NOPARALLEL > 0 ]];
 then
-    for repo in ${g[@]}
+    for repo in ${MODULES[@]}
     do
         echo -n "  "
-        echo "$repo" | cut -d"/" -f 3
-        (cd ${repo} && cd ../../trunk && $GIT pull | grep -v "Already up-to-date" | sed 's/^/    /g')
-        (cd ${repo} && cd ../../repository/scripts && $GIT pull | grep -v "Already up-to-date" | sed 's/^/    /g')
+        echo "$repo"
+        (cd ../modules/${repo}/trunk && $GIT pull | grep -v 'Already up-to-date' | sed 's/^/    /g')
+        (cd ../modules/${repo}/repository/scripts && $GIT pull | grep -v 'Already up-to-date' | sed 's/^/    /g')
     done
 else
-    echo "${g[@]}" | parallel --gnu -j8 "
+    echo "${MODULES[@]}" | parallel --gnu -j8 "
         echo -n '  '
-        echo '{}' | cut -d'/' -f 3
-        (cd {} && cd ../../trunk && $GIT pull | grep -v 'Already up-to-date' | sed 's/^/    /g')
-        (cd {} && cd ../../repository/scripts && $GIT pull | grep -v 'Already up-to-date' | sed 's/^/    /g')
+        echo '{}'
+        (cd ../modules/{}/trunk && $GIT pull | grep -v 'Already up-to-date' | sed 's/^/    /g')
+        (cd ../modules/{}/repository/scripts && $GIT pull | grep -v 'Already up-to-date' | sed 's/^/    /g')
     "
 fi
 

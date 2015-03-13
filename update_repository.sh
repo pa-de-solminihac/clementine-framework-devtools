@@ -12,7 +12,8 @@ which parallel > /dev/null
 NOPARALLEL=$?
 
 # recupere la liste des modules dispo dans le dossier ../modules/
-MODULES="$(ls -d ../modules/*/trunk/.git | sed 's/^...........//g' | sed 's/...........$//g')"
+./generate_modules.list.sh
+MODULES="$(cat modules.list)"
 
 # TODO: faire prendre en compte les arguments suivants
 #--package           : ne recupere que le package X
