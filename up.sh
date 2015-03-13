@@ -37,15 +37,25 @@ then
     do
         echo -n "  "
         echo "$repo"
-        (cd ../modules/${repo}/trunk && $GIT pull | grep -v 'Already up-to-date' | sed 's/^/    /g')
-        (cd ../modules/${repo}/repository/scripts && $GIT pull | grep -v 'Already up-to-date' | sed 's/^/    /g')
+        if [ -d "../modules/$MODULE" ];
+        then
+            (cd ../modules/${repo}/trunk && $GIT pull | grep -v 'Already up-to-date' | sed 's/^/    /g')
+            (cd ../modules/${repo}/repository/scripts && $GIT pull | grep -v 'Already up-to-date' | sed 's/^/    /g')
+        else
+            echo "    $MODULE (from modules.list) is not present in ../modules/"
+        fi
     done
 else
     echo "${MODULES[@]}" | parallel --gnu -j8 "
         echo -n '  '
         echo '{}'
-        (cd ../modules/{}/trunk && $GIT pull | grep -v 'Already up-to-date' | sed 's/^/    /g')
-        (cd ../modules/{}/repository/scripts && $GIT pull | grep -v 'Already up-to-date' | sed 's/^/    /g')
+        if [ -d '../modules/{}' ];
+        then
+            (cd ../modules/{}/trunk && $GIT pull | grep -v 'Already up-to-date' | sed 's/^/    /g')
+            (cd ../modules/{}/repository/scripts && $GIT pull | grep -v 'Already up-to-date' | sed 's/^/    /g')
+        else
+            echo '    {} (from modules.list) is not present in ../modules/'
+        fi
     "
 fi
 
