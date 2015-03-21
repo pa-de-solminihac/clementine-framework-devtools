@@ -28,6 +28,10 @@ which parallel > /dev/null
 NOPARALLEL=$?
 
 echo
+echo "${DEEPGREEN}Import missing modules (if any)${NORMAL}"
+./import_missing_modules.sh
+
+echo
 echo "${DEEPGREEN}Update modules${NORMAL}"
 #./generate_modules.list.sh
 MODULES="$(cat modules.list)"
