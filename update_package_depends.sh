@@ -24,7 +24,7 @@ fi
 PACKAGE=$1
 # listes les versions mineures maxi pour chaque version majeure
 LISTE=""
-cd ../modules/$PACKAGE/repository/src && LISTE=$(ls $PACKAGE-*.zip | sed 's/^.*-//g' | sed 's/\.zip//g' | sort -V)
+cd ../modules/$PACKAGE/repository/scripts/versions && LISTE=$(ls -d *.*/ | sed 's/\///g')
 if [[ "$LISTE" == "" ]]
 then
     echo "Pas de versions pour $PACKAGE";
@@ -40,13 +40,18 @@ for i in $(seq 1 $LAST_MAJ)
         LAST_VERSION=$(echo "$LISTE" | grep "^$i\." | tail -n 1)
         # echo "Derniere version mineure d'une version majeure :"
         echo "*** ATTENTION *** : bien verifier la coherence du fichier module.ini dans le zip suivant avant de continuer :"
-        echo "vim ../modules/$PACKAGE/repository/src/$PACKAGE-$LAST_VERSION.zip"
+        echo "vim ../repository/clementine-framework-module-$PACKAGE/archive/$LAST_VERSION.zip"
+
         # extrait les informations de dependances du package $LAST_VERSION
         DEPENDS_INI="$DEPENDS_INI
-$(unzip -p $PACKAGE-$LAST_VERSION.zip $PACKAGE/etc/module.ini | grep -A 1000 "^\[depends_$i\+\]" && echo "")"
+$(unzip -p ../../../../../repository/clementine-framework-module-$PACKAGE/archive/$LAST_VERSION.zip clementine-framework-module-$PACKAGE-$LAST_VERSION/etc/module.ini | grep -A 1000 "^\[depends_$i\+\]" && echo "")"
 done;
 
-echo "$DEPENDS_INI" > ../scripts/depends.ini
+echo "$DEPENDS_INI" > ../depends.ini
 
-# cat ../scripts/depends.ini
-echo "Lancer update_package_scripts"
+echo "Le fichier ../modules/$PACKAGE/repository/scripts/depends.ini à été mis a jour :"
+cat ../depends.ini
+
+echo
+echo
+echo "Il faut maintenance le commiter, puis lancer ./update_repository.sh"
