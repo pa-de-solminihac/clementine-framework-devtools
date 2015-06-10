@@ -27,6 +27,7 @@ fi
 PACKAGE=$1
 VERSION=$2
 SRC="trunk"
+VERSION_MAJ=$(echo "$VERSION" | sed 's/\..*//g')
 if [[ "$#" == 3 ]]
 then
     SRC=$3
@@ -36,6 +37,12 @@ fi
 if [[ "version=$VERSION" != "$(grep -o 'version=.*' ../modules/$PACKAGE/$SRC/etc/module.ini)" ]]
 then
     echo "Version mismatch in module.ini !"
+    exit 1
+fi
+
+if [[ "[depends_$VERSION_MAJ]" != "$(grep -o '^\[depends_[0-9]\+\]' ../modules/$PACKAGE/$SRC/etc/module.ini)" ]]
+then
+    echo "Dependencies mismatch in module.ini !"
     exit 1
 fi
 
