@@ -27,7 +27,6 @@ date '+%Y%m%d%H%M%S' > install_latest.txt && /bin/cp -pr install_latest.txt inst
 popd > /dev/null
 echo "Il ne reste plus qu'a committer les modifs :"
 echo "cd ../www/install"
-echo "git add stuff"
-echo "git commit stuff"
+echo "git commit -a"
 echo "git push"
 echo ""
