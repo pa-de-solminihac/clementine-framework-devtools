@@ -93,6 +93,8 @@ git tag -a $VERSION -m "\$(git log -1 --pretty=%B)"
 git push
 git push --tags
 cd ../repository/scripts
+git add --all
+git commit
 git push
 cd ../../../../devtools
 
