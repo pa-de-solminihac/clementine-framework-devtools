@@ -40,7 +40,8 @@ then
     exit 1
 fi
 
-if [[ "[depends_$VERSION_MAJ]" != "$(grep -o '^\[depends_[0-9]\+\]' ../modules/$PACKAGE/$SRC/etc/module.ini)" ]]
+GREPPED_VERSION="$(grep -o '^\[depends_[0-9]\+\]' ../modules/$PACKAGE/$SRC/etc/module.ini)"
+if [[ "[depends_$VERSION_MAJ]" != "$GREPPED_VERSION" && "$GREPPED_VERSION" != "" ]]
 then
     echo "Dependencies mismatch in module.ini !"
     exit 1
