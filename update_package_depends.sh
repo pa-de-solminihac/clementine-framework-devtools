@@ -1,5 +1,11 @@
 #!/bin/bash
 
+SORT="$(which gsort)"
+if [ ! -x $SORT ];
+then
+    SORT="sort"
+fi
+
 usage() {
 
     echo "Usage : `basename $0` <package>"
@@ -22,9 +28,9 @@ then
 fi
 
 PACKAGE=$1
-# listes les versions mineures maxi pour chaque version majeure
+# liste les versions mineures maxi pour chaque version majeure
 LISTE=""
-cd ../modules/$PACKAGE/repository/scripts/versions && LISTE=$(ls -d *.*/ | sed 's/\///g')
+cd ../modules/$PACKAGE/repository/scripts/versions && LISTE=$(ls -d *.*/ | $SORT -V | sed 's/\///g')
 if [[ "$LISTE" == "" ]]
 then
     echo "Pas de versions pour $PACKAGE";

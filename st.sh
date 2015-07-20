@@ -1,4 +1,23 @@
 #!/usr/bin/env bash
+
+SORT="$(which gsort)"
+if [ ! -x $SORT ];
+then
+    SORT="sort"
+fi
+
+TAC="$(which gtac)"
+if [ ! -x $TAC ];
+then
+    TAC="tac"
+fi
+
+SED="$(which gsed)"
+if [ ! -x $sed ];
+then
+    SED="sed"
+fi
+
 #paths
 GIT="git -c color.ui=always"
 PATH_TO_DEVTOOLS="$(dirname "$0")"
@@ -47,10 +66,12 @@ g=`ls -d ../modules/*/trunk/.git`
 for repo in ${g[@]}
 do
     module_name="$(echo "$repo" | cut -d "/" -f 3)"
-    MSG1=$(cd $repo && cd ../../trunk && $GIT status -sb | grep -v '## ' | sed 's/^/    /g' && git log --oneline $(git describe --abbrev=0 --tags).. | sed 's/^/    /g')
+    MSG1=$(cd $repo && cd ../../trunk && $GIT status -sb | grep -v '## ' | $SED 's/^/    /g' && git log --oneline $(git describe --abbrev=0 --tags).. | $SED 's/^/    /g')
     # echo " - $module_name (scripts)"
-    MSG2=$(cd $repo && cd ../../repository/scripts && $GIT status -sb | grep -v '## ' | sed 's/^/    /g')
-    if [[ "$MSG1" != "" || "$MSG2" != ""  ]]; then
+    MSG2=$(cd $repo && cd ../../repository/scripts && $GIT status -sb | grep -v '## ' | $SED 's/^/    /g')
+    # liste des commit (poussés ou non) depuis la dernière version publiée
+    MSG3="$(cd $repo && cd ../../repository/scripts/versions && LISTE=$(ls -d *.*/ | $SORT -V | $SED 's/\///g') && LAST=$(echo "$LISTE" | tail -n 1) && LAST_MAJ=$(echo $LAST | $SED 's/\..*//g') && git log | head -n 1000 | grep -iB 1000 "^ *$module_name $LAST" | $TAC | $SED "1,5{d}" | $TAC)"
+    if [[ "$MSG1" != "" || "$MSG2" != "" || "$MSG3" != "" ]]; then
         if [[ "$MSG1" != "" ]]; then
             echo "  ${BLUE}$module_name${NORMAL} ${DEEPBLUE}trunk${NORMAL}"
             echo "$MSG1";
@@ -58,6 +79,10 @@ do
         if [[ "$MSG2" != "" ]]; then
             echo "  ${BLUE}$module_name${NORMAL} ${DEEPBLUE}scripts${NORMAL}"
             echo "$MSG2";
+        fi
+        if [[ "$MSG3" != "" ]]; then
+            echo "  ${RED}$module_name${NORMAL} ${DEEPRED}scripts${NORMAL}"
+            echo "$MSG3";
         fi
     fi
 done
