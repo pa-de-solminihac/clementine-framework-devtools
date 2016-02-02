@@ -1,5 +1,27 @@
 #!/bin/bash
 
+# Pour créer une nouvelle version d'un package, lancer ./create_package PACKAGE N.m et suivez les instructions
+#
+# Si vous voulez créer un nouveau package 1.0, il faut :
+# - 2 github repositories:
+#         clementine-module-PACKAGE
+#         clementine-module-PACKAGE-scripts
+# - set collaborators on both if necessary
+# - clone clementine-module-PACKAGE in modules/PACKAGE/trunk
+# - clone clementine-module-PACKAGE-scripts in modules/PACKAGE/repository/scripts
+# - generate modules/PACKAGE/repository/scripts/depends.ini
+# - generate basic package structure with "create_module_structure.sh PACKAGE"
+# - move "PACKAGE/*" to "modules/PACKAGE/trunk" (you can rmdir remaining PACKAGE directory)
+# - create_package PACKAGE 1.0 and follow instructions.
+# - dont forget to "git push -u origin master" when you push on a repository the first time
+#
+# The package is ready. How you can publish your package:
+# - cd devtools
+# - add PACKAGE to modules.list
+# - git pull
+# - ./up.sh
+# - ./update_repository.sh
+
 usage() {
 
     echo "Usage : `basename $0` <package> <version> [dir_src]"
