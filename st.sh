@@ -66,9 +66,9 @@ g=`ls -d ../modules/*/trunk/.git`
 for repo in ${g[@]}
 do
     module_name="$(echo "$repo" | cut -d "/" -f 3)"
-    MSG1=$(cd $repo && cd ../../trunk && $GIT status -sb | grep -v '## ' | $SED 's/^/    /g' && git log --oneline $(git describe --abbrev=0 --tags).. | $SED 's/^/    /g')
+    MSG1=$(cd $repo && cd ../../trunk && $GIT status -sb | grep -v '##.*master.*origin/master' | $SED 's/^/    /g' && git log --oneline $(git describe --abbrev=0 --tags).. | $SED 's/^/    /g')
     # echo " - $module_name (scripts)"
-    MSG2=$(cd $repo && cd ../../repository/scripts && $GIT status -sb | grep -v '## ' | $SED 's/^/    /g')
+    MSG2=$(cd $repo && cd ../../repository/scripts && $GIT status -sb | grep -v '##.*master.*origin/master' | $SED 's/^/    /g')
     # liste des commit (poussés ou non) depuis la dernière version publiée
     #MSG3="$(cd $repo && cd ../../repository/scripts/versions && LISTE=$(ls -d *.*/ | $SORT -V | $SED 's/\///g') && LAST=$(echo "$LISTE" | tail -n 1) && LAST_MAJ=$(echo $LAST | $SED 's/\..*//g') && git log | head -n 1000 | grep -iB 1000 "^ *$module_name $LAST" | $TAC | $SED "1,5{d}" | $TAC)"
     #MSG3="$(cd $repo && cd ../../repository/scripts/versions && LISTE=$(ls -d *.*/ | $SORT -V | $SED 's/\///g') && LAST=$(echo "$LISTE" | tail -n 1) && LAST_MAJ=$(echo $LAST | $SED 's/\..*//g') && git log --all --pretty=oneline | head -n 1000 | grep -iB 1000 "^[a-f0-9]\+ *$module_name $LAST$" | grep -v "^[a-f0-9]\+ *$module_name $LAST$")"
