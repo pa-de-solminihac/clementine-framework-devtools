@@ -1,5 +1,8 @@
 #!/bin/bash
 
+# script obsolete, update_repository.sh le fait automatiquement
+exit
+
 SORT="$(which gsort)"
 if [ ! -x $SORT ];
 then
