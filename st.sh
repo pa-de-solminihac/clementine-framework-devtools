@@ -1,18 +1,18 @@
 #!/usr/bin/env bash
 
-SORT="$(which gsort)"
+SORT="$(which gsort 2> /dev/null)"
 if [ ! -x $SORT ];
 then
     SORT="sort"
 fi
 
-TAC="$(which gtac)"
+TAC="$(which gtac 2> /dev/null)"
 if [ ! -x $TAC ];
 then
     TAC="tac"
 fi
 
-SED="$(which gsed)"
+SED="$(which gsed 2> /dev/null)"
 if [ ! -x "$SED" ];
 then
     SED="sed"
