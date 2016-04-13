@@ -100,10 +100,7 @@ style(scope): Changes that do not affect the meaning of the code (white-space, f
 refactor(scope): A code change that neither fixes a bug nor adds a feature
 perf(scope): A code change that improves performance
 test(scope): Adding missing tests
-chore(scope): Changes to the build process or auxiliary tools and libraries such as documentation generation
-" > /tmp/.clementine_create_package_commit_template.txt
-
-#echo -e "$PACKAGE_UPPERCASE $VERSION\n\nchore(upgrade): CORE 5.0 and new clementine-framework .htaccess compatibility\n" > /tmp/.clementine_create_package_commit_message.txt
+chore(scope): Changes to the build process or auxiliary tools and libraries such as documentation generation" > /tmp/.clementine_create_package_commit_template.txt
 
 cat <<EOF
 
@@ -123,7 +120,6 @@ cd ../modules/$PACKAGE/trunk
 git pull
 git add --all
 git commit -t /tmp/.clementine_create_package_commit_template.txt
-#git commit -F /tmp/.clementine_create_package_commit_message.txt
 
 #================================================
 # C'est le moment d'écrire le message de commit !
