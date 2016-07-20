@@ -57,7 +57,7 @@ then
 fi
 
 #integrity check
-if [[ "version=$VERSION" != "$(grep -o 'version=.*' ../modules/$PACKAGE/$SRC/etc/module.ini)" ]]
+if [[ "version=$VERSION" != "$(grep -o 'version=.*' ../modules/$PACKAGE/$SRC/etc/module.ini | sed 's/"//g')" ]]
 then
     echo "Version mismatch in module.ini !"
     exit 1
