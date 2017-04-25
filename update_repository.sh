@@ -50,7 +50,7 @@ cd - > /dev/null
 
 wget -q $CLEMENTINE_INSTALLER_REPOSITORY_URL/archive/master.zip -O clementine-framework-installer/archive/master.zip && unzip -p clementine-framework-installer/archive/master.zip clementine-framework-installer-master/install_latest.txt > clementine-framework-installer/master/install_latest.txt && \
     # legacy : le lien de telechargement de l'installeur doit renvoyer l'installeur dans un format exploitable directement par l'utilisateur (ie. nom de dossier racine = install)
-    cd clementine-framework-installer/archive && unzip -q master.zip && mv clementine-framework-installer-master install && zip --quiet -r install.zip install && rm -rf install && mv install.zip ../../../modules/install.zip && cd ../../
+    cd clementine-framework-installer/archive && unzip -o -q master.zip && rm -rf install/clementine-framework-installer-master && mv clementine-framework-installer-master install && zip --quiet -r install.zip install && rm -rf install && mv install.zip ../../../modules/install.zip && cd ../../
 if [[ $? == 0 ]]; then
     let COL=83-${#MSG}
     printf "%${COL}s\n" "OK"
